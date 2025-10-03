@@ -1,9 +1,12 @@
 package fr.uvsq.cprog.collex;
+
 import java.util.Objects;
 
 public class AdresseIP {
-    private final String ip;
 
+    private final String ip;  
+
+    // Constructor 
     public AdresseIP(String ip) {
         if (!ip.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
             throw new IllegalArgumentException("Adresse IP invalide : " + ip);
@@ -11,15 +14,12 @@ public class AdresseIP {
         this.ip = ip;
     }
 
+    // Getter 
     public String getIp() {
         return ip;
     }
 
-    @Override
-    public String toString() {
-        return ip;
-    }
-
+    // equals() 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,8 +28,14 @@ public class AdresseIP {
         return ip.equals(other.ip);
     }
 
-    @Override
+    // hashCode() 
     public int hashCode() {
         return Objects.hash(ip);
+    }
+
+    // toString() 
+    @Override
+    public String toString() {
+        return ip;
     }
 }
