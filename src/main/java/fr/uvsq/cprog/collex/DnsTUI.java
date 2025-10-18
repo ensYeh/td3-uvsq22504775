@@ -2,16 +2,23 @@ package fr.uvsq.cprog.collex;
 
 import java.util.Scanner;
 
-public  class DnsTUI {
+/**
+ * Classe responsable de l'interface utilisateur textuelle.
+ * Elle lit les commandes, les interprète et crée l'objet Commande correspondant.
+ */
+public class DnsTUI {
 
     private final Scanner scanner = new Scanner(System.in);
     private final Dns dns;
 
     public DnsTUI(Dns dns) {
         this.dns = dns;
-    
     }
-        public Commande nextCommande() {
+
+    /**
+     * Lit la ligne saisie par l'utilisateur et renvoie l'objet Commande correspondant.
+     */
+    public Commande nextCommande() {
         System.out.print("> ");
         String ligne = scanner.nextLine().trim();
 
@@ -19,7 +26,9 @@ public  class DnsTUI {
         if (ligne.equalsIgnoreCase("quit") || ligne.equalsIgnoreCase("exit")) {
             return new CommandeQuitter();
         }
-if (ligne.startsWith("add ")) {
+
+        // commande pour ajouter : add <ip> <nom.qualifie>
+        if (ligne.startsWith("add ")) {
             String[] parts = ligne.split("\\s+");
             if (parts.length == 3) {
                 return new CommandeAdd(dns, parts[1], parts[2]);
@@ -28,7 +37,9 @@ if (ligne.startsWith("add ")) {
                 return null;
             }
         }
-if (ligne.startsWith("ls")) {
+
+        // commande pour lister : ls [-a] <domaine>
+        if (ligne.startsWith("ls")) {
             String[] parts = ligne.split("\\s+");
             boolean triParIP = parts.length > 2 && parts[1].equals("-a");
             String domaine = triParIP ? parts[2] : parts.length > 1 ? parts[1] : null;
@@ -40,3 +51,26 @@ if (ligne.startsWith("ls")) {
                 return null;
             }
         }
+
+        // si l'entrée est une adresse IP
+        if (ligne.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+            return new CommandeRechercheNom(dns, ligne);
+        }
+
+        // si l'entrée est un nom de machine
+        if (ligne.contains(".")) {
+            return new CommandeRechercheIP(dns, ligne);
+        }
+
+        System.out.println("Commande inconnue : " + ligne);
+        return null;
+    }
+
+    /**
+     * Affiche le message passé en paramètre.
+     */
+    public void affiche(String message) {
+        System.out.println(message);
+    }
+    
+}
