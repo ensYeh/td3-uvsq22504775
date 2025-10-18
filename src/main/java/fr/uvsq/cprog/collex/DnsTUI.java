@@ -2,10 +2,7 @@ package fr.uvsq.cprog.collex;
 
 import java.util.Scanner;
 
-/**
- * Classe responsable de l'interface utilisateur textuelle.
- * Elle lit les commandes, les interprète et crée l'objet Commande correspondant.
- */
+
 public class DnsTUI {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -15,9 +12,7 @@ public class DnsTUI {
         this.dns = dns;
     }
 
-    /**
-     * Lit la ligne saisie par l'utilisateur et renvoie l'objet Commande correspondant.
-     */
+   
     public Commande nextCommande() {
         System.out.print("> ");
         String ligne = scanner.nextLine().trim();
@@ -38,7 +33,7 @@ public class DnsTUI {
             }
         }
 
-        // commande pour lister : ls [-a] <domaine>
+       
         if (ligne.startsWith("ls")) {
             String[] parts = ligne.split("\\s+");
             boolean triParIP = parts.length > 2 && parts[1].equals("-a");
@@ -52,7 +47,7 @@ public class DnsTUI {
             }
         }
 
-        // si l'entrée est une adresse IP
+  
         if (ligne.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
             return new CommandeRechercheNom(dns, ligne);
         }
@@ -66,9 +61,8 @@ public class DnsTUI {
         return null;
     }
 
-    /**
-     * Affiche le message passé en paramètre.
-     */
+    
+     
     public void affiche(String message) {
         System.out.println(message);
     }

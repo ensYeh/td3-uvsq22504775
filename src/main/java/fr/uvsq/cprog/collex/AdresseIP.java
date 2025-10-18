@@ -6,7 +6,7 @@ public class AdresseIP {
 
     private final String ip;  
 
-    // Constructor 
+   
     public AdresseIP(String ip) {
         if (!ip.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
             throw new IllegalArgumentException("Adresse IP invalide : " + ip);
@@ -14,7 +14,7 @@ public class AdresseIP {
         this.ip = ip;
     }
 
-    // Getter 
+   
     public String getIp() {
         return ip;
     }
