@@ -19,4 +19,12 @@ public  class DnsTUI {
         if (ligne.equalsIgnoreCase("quit") || ligne.equalsIgnoreCase("exit")) {
             return new CommandeQuitter();
         }
-
+if (ligne.startsWith("add ")) {
+            String[] parts = ligne.split("\\s+");
+            if (parts.length == 3) {
+                return new CommandeAdd(dns, parts[1], parts[2]);
+            } else {
+                System.out.println("Usage : add <ip> <nom.machine>");
+                return null;
+            }
+        }
