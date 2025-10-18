@@ -2,7 +2,6 @@ package fr.uvsq.cprog.collex;
 
 import java.util.Scanner;
 
-
 public class DnsTUI {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -12,17 +11,16 @@ public class DnsTUI {
         this.dns = dns;
     }
 
-   
     public Commande nextCommande() {
         System.out.print("> ");
         String ligne = scanner.nextLine().trim();
 
-        // commande pour quitter
+        // Commande pour quitter
         if (ligne.equalsIgnoreCase("quit") || ligne.equalsIgnoreCase("exit")) {
             return new CommandeQuitter();
         }
 
-        // commande pour ajouter : add <ip> <nom.qualifie>
+        // Commande pour ajouter
         if (ligne.startsWith("add ")) {
             String[] parts = ligne.split("\\s+");
             if (parts.length == 3) {
@@ -33,7 +31,7 @@ public class DnsTUI {
             }
         }
 
-       
+        // Commande pour lister
         if (ligne.startsWith("ls")) {
             String[] parts = ligne.split("\\s+");
             boolean triParIP = parts.length > 2 && parts[1].equals("-a");
@@ -47,12 +45,12 @@ public class DnsTUI {
             }
         }
 
-  
+        // Recherche par IP
         if (ligne.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
             return new CommandeRechercheNom(dns, ligne);
         }
 
-        // si l'entrée est un nom de machine
+        // Recherche par nom de machine
         if (ligne.contains(".")) {
             return new CommandeRechercheIP(dns, ligne);
         }
@@ -61,10 +59,7 @@ public class DnsTUI {
         return null;
     }
 
-    
-     
     public void affiche(String message) {
         System.out.println(message);
     }
-    
 }
