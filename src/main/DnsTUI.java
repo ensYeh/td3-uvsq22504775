@@ -28,3 +28,15 @@ if (ligne.startsWith("add ")) {
                 return null;
             }
         }
+if (ligne.startsWith("ls")) {
+            String[] parts = ligne.split("\\s+");
+            boolean triParIP = parts.length > 2 && parts[1].equals("-a");
+            String domaine = triParIP ? parts[2] : parts.length > 1 ? parts[1] : null;
+
+            if (domaine != null) {
+                return new CommandeListe(dns, domaine, triParIP);
+            } else {
+                System.out.println("Usage : ls [-a] <domaine>");
+                return null;
+            }
+        }
