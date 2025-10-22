@@ -6,20 +6,19 @@ public class AdresseIP {
 
     private final String ip;  
 
-   
     public AdresseIP(String ip) {
-        if (!ip.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+        // Regex stricte pour valider qu'une adresse IP est correcte (0-255 pour chaque octet)
+        if (!ip.matches("((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)")) {
             throw new IllegalArgumentException("Adresse IP invalide : " + ip);
         }
         this.ip = ip;
     }
 
-   
     public String getIp() {
         return ip;
     }
 
-    // equals() 
+    // equals()
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,12 +27,13 @@ public class AdresseIP {
         return ip.equals(other.ip);
     }
 
-    // hashCode() 
+    // hashCode()
+    @Override
     public int hashCode() {
         return Objects.hash(ip);
     }
 
-    // toString() 
+    // toString()
     @Override
     public String toString() {
         return ip;

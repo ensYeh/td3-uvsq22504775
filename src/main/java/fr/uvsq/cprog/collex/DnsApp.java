@@ -2,6 +2,11 @@ package fr.uvsq.cprog.collex;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import fr.uvsq.cprog.collex.Commande;
+import fr.uvsq.cprog.collex.CommandeQuitter;
+import fr.uvsq.cprog.collex.Dns;
+import fr.uvsq.cprog.collex.DnsTUI;
+
 public class DnsApp {
     public static void main(String[] args) {
         try {
