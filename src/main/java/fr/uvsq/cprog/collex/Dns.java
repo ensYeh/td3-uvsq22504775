@@ -24,8 +24,8 @@ public class Dns {
             for (String ligne : lignes) {
                 String[] parts = ligne.split("\\s+");
                 if (parts.length != 2) continue;
-                NomMachine nom = new NomMachine(parts[0]);
                 AdresseIP ip = new AdresseIP(parts[1]);
+                NomMachine nom = new NomMachine(parts[0]);
                 DnsItem item = new DnsItem(ip, nom);
                 parNom.put(nom.getNomComplet(), item);
                 parIP.put(ip.getIp(), item);
@@ -56,38 +56,40 @@ public class Dns {
     }
 
     public void addItem(AdresseIP ip, NomMachine nom) throws IOException {
-        if (parNom.containsKey(nom.getNomComplet())) {
+        if (parNom.containsKey(nom.getNomComplet()))
             throw new IllegalArgumentException("ERREUR : Le nom de machine existe déjà !");
-        }
-        if (parIP.containsKey(ip.getIp())) {
+        if (parIP.containsKey(ip.getIp()))
             throw new IllegalArgumentException("ERREUR : L'adresse IP existe déjà !");
-        }
+
         DnsItem item = new DnsItem(ip, nom);
         parNom.put(nom.getNomComplet(), item);
         parIP.put(ip.getIp(), item);
         sauvegarder();
     }
 
-    public void removeItem(NomMachine nom) throws IOException {
+    // Supprimer par NomMachine
+    public boolean supprimerItem(NomMachine nom) throws IOException {
         DnsItem item = parNom.remove(nom.getNomComplet());
         if (item != null) {
             parIP.remove(item.getIp().getIp());
             sauvegarder();
-        } else {
-            throw new IllegalArgumentException("ERREUR : Machine inexistante !");
+            return true;
         }
+        return false;
     }
 
-    public void removeItem(AdresseIP ip) throws IOException {
+    // Supprimer par AdresseIP
+    public boolean supprimerItem(AdresseIP ip) throws IOException {
         DnsItem item = parIP.remove(ip.getIp());
         if (item != null) {
             parNom.remove(item.getMachine().getNomComplet());
             sauvegarder();
-        } else {
-            throw new IllegalArgumentException("ERREUR : Adresse IP inexistante !");
+            return true;
         }
+        return false;
     }
 
+    // Méthode interne pour mettre à jour le fichier
     private void sauvegarder() throws IOException {
         List<String> lignes = new ArrayList<>();
         for (DnsItem i : parNom.values()) {

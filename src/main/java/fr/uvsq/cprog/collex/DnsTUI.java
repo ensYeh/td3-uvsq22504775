@@ -15,12 +15,10 @@ public class DnsTUI {
         System.out.print("> ");
         String ligne = scanner.nextLine().trim();
 
-        // Commande pour quitter
         if (ligne.equalsIgnoreCase("quit") || ligne.equalsIgnoreCase("exit")) {
             return new CommandeQuitter();
         }
 
-        // Commande pour ajouter
         if (ligne.startsWith("add ")) {
             String[] parts = ligne.split("\\s+");
             if (parts.length == 3) {
@@ -31,29 +29,6 @@ public class DnsTUI {
             }
         }
 
-        // Commande pour supprimer par nom de machine
-        if (ligne.startsWith("remove ")) {
-            String[] parts = ligne.split("\\s+");
-            if (parts.length == 2) {
-                return new CommandeSupprimer(dns, parts[1]);
-            } else {
-                System.out.println("Usage : remove <nom.machine>");
-                return null;
-            }
-        }
-
-        // Commande pour supprimer par IP
-        if (ligne.startsWith("remove-ip ")) {
-            String[] parts = ligne.split("\\s+");
-            if (parts.length == 2) {
-                return new CommandeSupprimerIP(dns, parts[1]);
-            } else {
-                System.out.println("Usage : remove-ip <adresse.ip>");
-                return null;
-            }
-        }
-
-        // Commande pour lister
         if (ligne.startsWith("ls")) {
             String[] parts = ligne.split("\\s+");
             boolean triParIP = parts.length > 2 && parts[1].equals("-a");
@@ -67,12 +42,29 @@ public class DnsTUI {
             }
         }
 
-        // Recherche par IP
+        // Supprimer par IP ou par nom
+        if (ligne.startsWith("delete ")) {
+            String[] parts = ligne.split("\\s+");
+            if (parts.length == 2) {
+                String target = parts[1];
+                if (target.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+                    return new CommandeSupprimerIP(dns, target);
+                } else if (target.contains(".")) {
+                    return new CommandeSupprimerNom(dns, target);
+                } else {
+                    System.out.println("NomMachine ou IP invalide");
+                    return null;
+                }
+            } else {
+                System.out.println("Usage : delete <ip|nom.machine>");
+                return null;
+            }
+        }
+
         if (ligne.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
             return new CommandeRechercheNom(dns, ligne);
         }
 
-        // Recherche par nom de machine
         if (ligne.contains(".")) {
             return new CommandeRechercheIP(dns, ligne);
         }
