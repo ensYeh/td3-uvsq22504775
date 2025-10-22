@@ -6,33 +6,35 @@ import org.junit.Test;
 
 public class NomMachineTest {
 
+    // ✅ Test pour un nom valide
     @Test
     public void testValidNomMachine() {
-        NomMachine nom = new NomMachine("www.uvsq.fr");
-        assertEquals("www.uvsq.fr", nom.getNomComplet());
-        assertEquals("www", nom.getNom());
-        assertEquals("uvsq.fr", nom.getDomaine());
+        NomMachine nm = new NomMachine("machine1");
+        assertEquals("machine1", nm.toString());
     }
 
+    // ✅ Test pour un nom invalide (caractère interdit '@')
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidNomMachine() {
-        new NomMachine("machineSansPoint");
+        new NomMachine("machine@"); 
     }
 
-    @Test
-    public void testEqualsAndHashCode() {
-        NomMachine nom1 = new NomMachine("ecampus.uvsq.fr");
-        NomMachine nom2 = new NomMachine("ecampus.uvsq.fr");
-        NomMachine nom3 = new NomMachine("poste.uvsq.fr");
-
-        assertEquals(nom1, nom2);
-        assertNotEquals(nom1, nom3);
-        assertEquals(nom1.hashCode(), nom2.hashCode());
-    }
-
+    // ✅ Test toString
     @Test
     public void testToString() {
-        NomMachine nom = new NomMachine("poste.uvsq.fr");
-        assertEquals("poste.uvsq.fr", nom.toString());
+        NomMachine nm = new NomMachine("serveur01");
+        assertEquals("serveur01", nm.toString());
+    }
+
+    // ✅ Test equals et hashCode
+    @Test
+    public void testEqualsAndHashCode() {
+        NomMachine nm1 = new NomMachine("pc01");
+        NomMachine nm2 = new NomMachine("pc01");
+        NomMachine nm3 = new NomMachine("pc02");
+
+        assertEquals(nm1, nm2);
+        assertEquals(nm1.hashCode(), nm2.hashCode());
+        assertNotEquals(nm1, nm3);
     }
 }

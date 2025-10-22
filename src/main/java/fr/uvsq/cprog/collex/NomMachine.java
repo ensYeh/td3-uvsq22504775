@@ -4,29 +4,31 @@ import java.util.Objects;
 
 public class NomMachine {
 
-    private final String nomComplet;
-    private final String nom;
-    private final String domaine;
+    private final String nomComplet; // ex : machine.local, poste.uvsq.fr
 
     public NomMachine(String nomComplet) {
-        if (!nomComplet.contains(".")) {
+        if (nomComplet == null || !nomComplet.matches("[a-zA-Z0-9]+([-.][a-zA-Z0-9]+)*")) {
             throw new IllegalArgumentException("NomMachine invalide : " + nomComplet);
         }
         this.nomComplet = nomComplet;
-        String[] parts = nomComplet.split("\\.", 2);
-        this.nom = parts[0];
-        this.domaine = parts[1];
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public String getDomaine() {
-        return domaine;
-    }
-
+    // renvoie le nom complet
     public String getNomComplet() {
+        return nomComplet;
+    }
+
+    // renvoie le domaine (tout après le premier '.')
+    public String getDomaine() {
+        int idx = nomComplet.indexOf('.');
+        if (idx == -1 || idx == nomComplet.length() - 1) {
+            return ""; // pas de domaine
+        }
+        return nomComplet.substring(idx + 1);
+    }
+
+    @Override
+    public String toString() {
         return nomComplet;
     }
 
@@ -34,17 +36,12 @@ public class NomMachine {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof NomMachine)) return false;
-        NomMachine other = (NomMachine) o;
-        return nomComplet.equals(other.nomComplet);
+        NomMachine that = (NomMachine) o;
+        return nomComplet.equals(that.nomComplet);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(nomComplet);
-    }
-
-    @Override
-    public String toString() {
-        return nomComplet;
     }
 }

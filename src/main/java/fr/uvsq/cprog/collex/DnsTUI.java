@@ -31,6 +31,28 @@ public class DnsTUI {
             }
         }
 
+        // Commande pour supprimer par nom de machine
+        if (ligne.startsWith("remove ")) {
+            String[] parts = ligne.split("\\s+");
+            if (parts.length == 2) {
+                return new CommandeSupprimer(dns, parts[1]);
+            } else {
+                System.out.println("Usage : remove <nom.machine>");
+                return null;
+            }
+        }
+
+        // Commande pour supprimer par IP
+        if (ligne.startsWith("remove-ip ")) {
+            String[] parts = ligne.split("\\s+");
+            if (parts.length == 2) {
+                return new CommandeSupprimerIP(dns, parts[1]);
+            } else {
+                System.out.println("Usage : remove-ip <adresse.ip>");
+                return null;
+            }
+        }
+
         // Commande pour lister
         if (ligne.startsWith("ls")) {
             String[] parts = ligne.split("\\s+");

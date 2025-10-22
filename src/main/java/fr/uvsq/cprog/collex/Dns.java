@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 public class Dns {
 
     private final Map<String, DnsItem> parNom = new HashMap<>();
@@ -24,11 +23,9 @@ public class Dns {
             List<String> lignes = Files.readAllLines(fichierBD);
             for (String ligne : lignes) {
                 String[] parts = ligne.split("\\s+");
-                if (parts.length != 2) {
-                    continue;
-                }
-                AdresseIP ip = new AdresseIP(parts[1]);
+                if (parts.length != 2) continue;
                 NomMachine nom = new NomMachine(parts[0]);
+                AdresseIP ip = new AdresseIP(parts[1]);
                 DnsItem item = new DnsItem(ip, nom);
                 parNom.put(nom.getNomComplet(), item);
                 parIP.put(ip.getIp(), item);
@@ -36,22 +33,20 @@ public class Dns {
         }
     }
 
-
     public DnsItem getItem(NomMachine nom) {
         return parNom.get(nom.getNomComplet());
     }
 
-    
     public DnsItem getItem(AdresseIP ip) {
         return parIP.get(ip.getIp());
     }
+
     public List<DnsItem> getItems(String domaine) {
         return parNom.values().stream()
                 .filter(item -> item.getMachine().getDomaine().equals(domaine))
                 .sorted(Comparator.comparing(i -> i.getMachine().getNomComplet()))
                 .collect(Collectors.toList());
     }
-
 
     public List<DnsItem> getItemsByIP(String domaine) {
         return parNom.values().stream()
@@ -60,7 +55,6 @@ public class Dns {
                 .collect(Collectors.toList());
     }
 
-    
     public void addItem(AdresseIP ip, NomMachine nom) throws IOException {
         if (parNom.containsKey(nom.getNomComplet())) {
             throw new IllegalArgumentException("ERREUR : Le nom de machine existe déjà !");
@@ -71,8 +65,30 @@ public class Dns {
         DnsItem item = new DnsItem(ip, nom);
         parNom.put(nom.getNomComplet(), item);
         parIP.put(ip.getIp(), item);
+        sauvegarder();
+    }
 
-        
+    public void removeItem(NomMachine nom) throws IOException {
+        DnsItem item = parNom.remove(nom.getNomComplet());
+        if (item != null) {
+            parIP.remove(item.getIp().getIp());
+            sauvegarder();
+        } else {
+            throw new IllegalArgumentException("ERREUR : Machine inexistante !");
+        }
+    }
+
+    public void removeItem(AdresseIP ip) throws IOException {
+        DnsItem item = parIP.remove(ip.getIp());
+        if (item != null) {
+            parNom.remove(item.getMachine().getNomComplet());
+            sauvegarder();
+        } else {
+            throw new IllegalArgumentException("ERREUR : Adresse IP inexistante !");
+        }
+    }
+
+    private void sauvegarder() throws IOException {
         List<String> lignes = new ArrayList<>();
         for (DnsItem i : parNom.values()) {
             lignes.add(i.getMachine().getNomComplet() + " " + i.getIp().getIp());
